@@ -1,18 +1,18 @@
 # RPGDragon - 2D Top-Down RPG
 
-Game 2D RPG góc nhìn top-down (Zelda-like) được xây dựng bằng Unity va C#.  
-Nhan vat chinh danh can chien, nhan nhiem vu tu NPC, di qua 3 map va danh boss cuoi la Rong.
+Game 2D RPG góc nhìn top-down (phong cách Zelda) được xây dựng bằng Unity và C#.
+Nhân vật chính đánh cận chiến, nhận nhiệm vụ từ NPC, đi qua 3 map và đánh boss cuối là Rồng.
 
 ## Gameplay
 
-- **Di chuyen top-down** - WASD / Phim mui ten, xoay theo 4 huong
-- **Danh can chien** - Space/Z de tan cong, co cooldown, knockback
-- **He thong nhiem vu** - Nhan quest tu NPC, theo doi tien trinh, bao cao de nhan thuong
-- **3 Map** - Rung (Forest) -> Ham ngo (Dungeon) -> Thanh castle (Boss Castle)
-- **Danh Boss** - Rong 2 phase: vuot + phun lua (phase 1), nhanh hon + trieu hoi (phase 2)
-- **NPC hoi thoai** - Hieu ung typewriter, lua chon chap nhan/tu choi quest
+- **Di chuyển top-down** - WASD / Phím mũi tên, xoay theo 4 hướng
+- **Đánh cận chiến** - Space/Z để tấn công, có cooldown, knockback
+- **Hệ thống nhiệm vụ** - Nhận quest từ NPC, theo dõi tiến trình, báo cáo để nhận thưởng
+- **3 Map** - Rừng (Forest) -> Hầm ngục (Dungeon) -> Thành castle (Boss Castle)
+- **Đánh Boss** - Rồng 2 phase: vồ + phun lửa (phase 1), nhanh hơn + triệu hồi (phase 2)
+- **NPC hội thoại** - Hiệu ứng typewriter, lựa chọn chấp nhận/từ chối quest
 
-## Kien truc
+## Kiến trúc
 
 ```
 Assets/Scripts/
@@ -27,43 +27,43 @@ Assets/Scripts/
 ### Design Patterns
 
 - **Singleton** - GameManager, EventBus, AudioManager, QuestManager, DialogueSystem, SceneLoader
-- **Observer (EventBus)** - He thong su kien ket noi cac thanh phan: `EventBus.Raise<T>()` / `Register<T>()`
+- **Observer (EventBus)** - Hệ thống sự kiện kết nối các thành phần: `EventBus.Raise<T>()` / `Register<T>()`
 - **State Machine (enum+switch)** - Player: Idle/Walk/Attack/Hurt/Dead; Enemy: Idle/Patrol/Chase/Attack/Hurt/Dead
-- **ScriptableObject** - Dinh nghia quest va hoi thoai trong Inspector (data-driven)
-- **Object Pooling** - DamagePopup, projectile, hieu ung hit
+- **ScriptableObject** - Định nghĩa quest và hội thoại trong Inspector (data-driven)
+- **Object Pooling** - DamagePopup, projectile, hiệu ứng hit
 
-## Danh sach Map
+## Danh sách Map
 
-| Scene | Mo ta | Enemy | NPC |
+| Scene | Mô tả | Enemy | NPC |
 |---|---|---|---|
-| MainMenu | Man hinh title, Play/Load/Quit | - | - |
-| Map1_Forest | Lang bat dau + khu rung | Slime, Bat | OldMan (nhiem vu) |
-| Map2_Dungeon | Hang dong ngam | Skeleton, Slime | Sage (co truyen) |
-| Map3_BossCastle | Phong Boss | Minion waves, Dragon Boss | - |
+| MainMenu | Màn hình title, Play/Load/Quit | - | - |
+| Map1_Forest | Làng bắt đầu + khu rừng | Slime, Bat | OldMan (giao nhiệm vụ) |
+| Map2_Dungeon | Hang động ngầm | Skeleton, Slime | Sage (cốt truyện) |
+| Map3_BossCastle | Phòng Boss | Minion waves, Dragon Boss | - |
 
-## Huong dan Setup
+## Hướng dẫn Setup
 
-1. Cai **Unity Hub** va **Unity Editor 2022.3 LTS**
-2. Clone repo nay ve may
-3. Mo Unity Hub -> **Open Project** -> chon thu muc game
-4. Trong Unity Editor, mo scene `Scenes/MainMenu` va an **Play**
+1. Cài **Unity Hub** và **Unity Editor 2022.3 LTS**
+2. Clone repo này về máy
+3. Mở Unity Hub -> **Open Project** -> chọn thư mục game
+4. Trong Unity Editor, mở scene `Scenes/MainMenu` và nhấn **Play**
 
-> **Luu y:** Repo nay chi chua C# scripts. Ban can tu import sprite/tilemap assets va dung scene trong Unity Editor.
+> **Lưu ý:** Repo này chỉ chứa C# scripts. Bạn cần tự import sprite/tilemap assets và dựng scene trong Unity Editor.
 
-## Trang thai hien tai
+## Trạng thái hiện tại
 
-Giai doan MVP - da hoan thanh gameplay co ban:
-- Da co: Di chuyen player, danh can chien, enemy AI, quest system, NPC hoi thoai, chuyen map, boss 2 phase, UI (health bar, quest log, pause menu)
-- Thieu: Setup scene Unity, prefab, tilemap, asset 2D
+Giai đoạn MVP - đã hoàn thành gameplay cơ bản:
+- Đã có: Di chuyển player, đánh cận chiến, enemy AI, quest system, NPC hội thoại, chuyển map, boss 2 phase, UI (health bar, quest log, pause menu)
+- Thiếu: Setup scene Unity, prefab, tilemap, asset 2D
 
-## Assets de nghi
+## Assets đề nghị
 
-- **Nhan vat:** 2D Pixel Art RPG spritesheet (4 huong di chuyen, danh)
+- **Nhân vật:** 2D Pixel Art RPG spritesheet (4 hướng di chuyển, đánh)
 - **Map:** Top-down tilemap (grassland, dungeon, castle)
 - **Enemy:** Slime, Skeleton, Bat, Dragon 2D pixel art
 - **UI:** RPG UI pack (health bar, buttons, dialogue box)
-- **Am thanh:** Free RPG SFX pack (kiem, hit, chet, BGM)
+- **Âm thanh:** Free RPG SFX pack (kiếm, hit, chết, BGM)
 
-## Giao dich
+## Giấy phép
 
 MIT
