@@ -48,7 +48,7 @@ Assets/Scripts/
 3. Mở Unity Hub -> **Open Project** -> chọn thư mục game
 4. Trong Unity Editor, mở scene `Scenes/MainMenu` và nhấn **Play**
 
-> **Lưu ý:** Repo này chỉ chứa C# scripts. Bạn cần tự import sprite/tilemap assets và dựng scene trong Unity Editor.
+> **Lưu ý:** Repo này chỉ chứa C# scripts.Cần tự import sprite/tilemap assets và dựng scene trong Unity Editor.
 
 ## Trạng thái hiện tại
 
