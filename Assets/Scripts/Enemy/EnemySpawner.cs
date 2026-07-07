@@ -89,18 +89,14 @@ namespace RPGDragon.Enemy
             while (pool.Count > 0)
             {
                 GameObject obj = pool.Dequeue();
-                if (obj != null)
+                if (obj != null && !obj.activeInHierarchy)
                 {
                     return obj;
                 }
             }
 
-            // Pool exhausted, create a new object
-            GameObject newObj = CreatePooledObject(prefabIndex);
-            if (newObj != null)
-                pool.Enqueue(newObj);
-
-            return newObj;
+            // Pool exhausted, create a new object (don't enqueue — ReturnToPool handles that on death)
+            return CreatePooledObject(prefabIndex);
         }
 
         private void ReturnToPool(GameObject obj, int prefabIndex)
@@ -273,11 +269,16 @@ namespace RPGDragon.Enemy
                     // Find the prefab index for pooling
                     for (int i = 0; i < enemyPrefabs.Length; i++)
                     {
-                        if (enemyPrefabs[i] != null &&
-                            enemy.gameObject.name.Contains(enemyPrefabs[i].name))
+                        if (enemyPrefabs[i] != null)
                         {
-                            ReturnToPool(enemy.gameObject, i);
-                            break;
+                            string enemyName = enemy.gameObject.name;
+                            int cloneIdx = enemyName.IndexOf("(Clone)");
+                            if (cloneIdx >= 0) enemyName = enemyName.Substring(0, cloneIdx).Trim();
+                            if (string.Equals(enemyName, enemyPrefabs[i].name, System.StringComparison.Ordinal))
+                            {
+                                ReturnToPool(enemy.gameObject, i);
+                                break;
+                            }
                         }
                     }
                 }

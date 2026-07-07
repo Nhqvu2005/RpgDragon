@@ -14,9 +14,6 @@ namespace RPGDragon.Player
 
     public class PlayerController : MonoBehaviour
     {
-        [Header("Movement Settings")]
-        [SerializeField] private float moveSpeed = 5f;
-
         [Header("References")]
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private Animator animator;
@@ -100,7 +97,8 @@ namespace RPGDragon.Player
             if (inputDisabled)
                 return;
 
-            rb.velocity = inputDirection * moveSpeed;
+            float speed = GetComponent<PlayerStats>()?.MoveSpeed ?? 5f;
+            rb.velocity = inputDirection * speed;
         }
 
         // --- State Machine ---

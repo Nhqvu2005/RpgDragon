@@ -80,7 +80,6 @@ namespace RPGDragon.Quest
                             Current = objective.currentCount,
                             Target = objective.targetCount
                         });
-                        return;
                     }
                 }
             }

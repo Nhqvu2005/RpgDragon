@@ -16,6 +16,15 @@ namespace RPGDragon.Core
     }
 
     /// <summary>
+    /// Raised when the player is healed.
+    /// </summary>
+    public struct PlayerHealedEvent
+    {
+        public int Amount;
+        public int CurrentHP;
+    }
+
+    /// <summary>
     /// Raised when the player dies.
     /// </summary>
     public struct PlayerDiedEvent { }

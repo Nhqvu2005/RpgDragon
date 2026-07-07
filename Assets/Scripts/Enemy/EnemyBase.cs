@@ -17,12 +17,13 @@ namespace RPGDragon.Enemy
     public abstract class EnemyBase : MonoBehaviour
     {
         [Header("Stats")]
-        [SerializeField] protected int maxHP = 100;
-        [SerializeField] protected float moveSpeed = 3f;
-        [SerializeField] protected int attackDamage = 10;
+        [SerializeField] protected string enemyType = "Enemy";
+        [SerializeField] protected int maxHP = 10;
+        [SerializeField] protected int currentHP;
+        [SerializeField] protected float moveSpeed = 2f;
+        [SerializeField] protected int attackDamage = 1;
         [SerializeField] protected float detectionRange = 5f;
         [SerializeField] protected float attackRange = 1.5f;
-        [SerializeField] protected EnemyStatsConfig statsConfig;
 
         [Header("Components")]
         [SerializeField] protected SpriteRenderer spriteRenderer;
@@ -32,7 +33,6 @@ namespace RPGDragon.Enemy
         [Header("Knockback")]
         [SerializeField] protected float knockbackResistance = 1f;
 
-        protected int currentHP;
         protected EnemyState currentState;
         protected Transform player;
         protected bool isDead = false;
@@ -40,9 +40,6 @@ namespace RPGDragon.Enemy
 
         protected virtual void Awake()
         {
-            if (statsConfig != null)
-                ApplyStatsConfig();
-
             currentHP = maxHP;
 
             if (spriteRenderer == null)
@@ -94,6 +91,7 @@ namespace RPGDragon.Enemy
 
         protected virtual void EnterState(EnemyState newState)
         {
+            if (currentState == newState) return;
             ExitState(currentState);
             currentState = newState;
         }
@@ -145,6 +143,7 @@ namespace RPGDragon.Enemy
             }
             else
             {
+                isHurt = true;
                 EnterState(EnemyState.Hurt);
             }
         }
@@ -167,10 +166,10 @@ namespace RPGDragon.Enemy
 
         private IEnumerator PlayDeathAndDestroy()
         {
-            EventBus.Raise(new EnemyDefeatedEvent
+            EventBus.Raise<RPGDragon.Core.EnemyDefeatedEvent>(new RPGDragon.Core.EnemyDefeatedEvent
             {
-                Position = transform.position,
-                EnemyObject = gameObject
+                EnemyType = enemyType,
+                Position = transform.position
             });
 
             yield return new WaitForSeconds(1f);
@@ -216,16 +215,6 @@ namespace RPGDragon.Enemy
             return ((Vector2)player.position - (Vector2)transform.position).normalized;
         }
 
-        protected void ApplyStatsConfig()
-        {
-            if (statsConfig == null) return;
-            maxHP = statsConfig.maxHP;
-            moveSpeed = statsConfig.moveSpeed;
-            attackDamage = statsConfig.attackDamage;
-            detectionRange = statsConfig.detectionRange;
-            attackRange = statsConfig.attackRange;
-        }
-
         protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
@@ -236,17 +225,5 @@ namespace RPGDragon.Enemy
         }
 
         #endregion
-    }
-
-    public struct EnemyDefeatedEvent
-    {
-        public Vector3 Position;
-        public GameObject EnemyObject;
-    }
-
-    public struct BossDefeatedEvent
-    {
-        public Vector3 Position;
-        public GameObject BossObject;
     }
 }

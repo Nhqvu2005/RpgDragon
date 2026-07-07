@@ -74,6 +74,14 @@ namespace RPGDragon.Enemy
         {
             base.Start();
             StartCoroutine(AttackPatternRoutine());
+
+            // Initialize boss health bar
+            var bossBar = FindObjectOfType<RPGDragon.UI.BossHealthBar>();
+            if (bossBar != null)
+            {
+                bossBar.Show();
+                bossBar.SetBoss("Ancient Dragon", maxHP);
+            }
         }
 
         protected override void Update()
@@ -339,12 +347,12 @@ namespace RPGDragon.Enemy
                 yield return null;
             }
 
+            // Hide boss health bar
+            var bossBar = FindObjectOfType<RPGDragon.UI.BossHealthBar>();
+            if (bossBar != null) bossBar.Hide();
+
             // Raise boss defeated event
-            EventBus.Raise(new BossDefeatedEvent
-            {
-                Position = transform.position,
-                BossObject = gameObject
-            });
+            EventBus.Raise<RPGDragon.Core.BossDefeatedEvent>(new RPGDragon.Core.BossDefeatedEvent());
 
             // Drop reward
             if (rewardDropPrefab != null)

@@ -1,13 +1,16 @@
+// This file is deprecated — dialogue UI is managed by RPGDragon.NPC.DialogueSystem.
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using RPGDragon.Core;
 
 namespace RPGDragon.UI
 {
     /// <summary>
     /// Manages the in-game dialogue panel: typewriter effect, continue prompt,
-    /// and show/hide driven by <see cref="EventBus"/> events.
+    /// and show/hide. This is a pass-through UI controller — the actual dialogue
+    /// logic lives in <c>RPGDragon.NPC.DialogueSystem</c>, which calls
+    /// <see cref="ShowDialogue"/> and <see cref="HideDialogue"/> directly.
+    /// <para>Deprecated — kept only for the typewriter/blink presentation layer.</para>
     /// </summary>
     public class DialogueUI : MonoBehaviour
     {
@@ -27,18 +30,6 @@ namespace RPGDragon.UI
         private bool _skipTyping;
 
         // ── Unity Lifecycle ─────────────────────────────────────────────────────
-
-        private void OnEnable()
-        {
-            EventBus.Register<DialogueStartedEvent>(OnDialogueStarted);
-            EventBus.Register<DialogueEndedEvent>(OnDialogueEnded);
-        }
-
-        private void OnDisable()
-        {
-            EventBus.Unregister<DialogueStartedEvent>(OnDialogueStarted);
-            EventBus.Unregister<DialogueEndedEvent>(OnDialogueEnded);
-        }
 
         private void Start()
         {
@@ -114,21 +105,6 @@ namespace RPGDragon.UI
 
             if (dialoguePanel != null)
                 dialoguePanel.SetActive(false);
-        }
-
-        // ── Event Handlers ──────────────────────────────────────────────────────
-
-        private void OnDialogueStarted(DialogueStartedEvent evt)
-        {
-            // The actual text is supplied via ShowDialogue from the NPC/DialogueManager.
-            // Here we simply ensure the panel is visible.
-            if (dialoguePanel != null)
-                dialoguePanel.SetActive(true);
-        }
-
-        private void OnDialogueEnded(DialogueEndedEvent evt)
-        {
-            HideDialogue();
         }
 
         // ── Coroutines ──────────────────────────────────────────────────────────

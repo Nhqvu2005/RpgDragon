@@ -19,6 +19,7 @@ namespace RPGDragon.Player
 
         private float lastAttackTime = -Mathf.Infinity;
         private bool isAttacking = false;
+        private Animator cachedAnimator;
 
         // --- Unity Lifecycle ---
 
@@ -26,6 +27,7 @@ namespace RPGDragon.Player
         {
             playerController = GetComponent<PlayerController>();
             playerStats = GetComponent<PlayerStats>();
+            cachedAnimator = GetComponent<Animator>();
         }
 
         private void Update()
@@ -73,13 +75,12 @@ namespace RPGDragon.Player
             playerController.SetState(PlayerState.Attack);
 
             // Trigger attack animation
-            Animator animator = GetComponent<Animator>();
-            if (animator != null)
+            if (cachedAnimator != null)
             {
                 Vector2 facing = playerController.GetFacingDirection();
-                animator.SetFloat("moveX", facing.x);
-                animator.SetFloat("moveY", facing.y);
-                animator.SetTrigger("attack");
+                cachedAnimator.SetFloat("moveX", facing.x);
+                cachedAnimator.SetFloat("moveY", facing.y);
+                cachedAnimator.SetTrigger("attack");
             }
 
             // Calculate hitbox position in facing direction
@@ -103,7 +104,8 @@ namespace RPGDragon.Player
                     Vector2 knockbackDir = ((Vector2)hit.transform.position - (Vector2)transform.position).normalized;
 
                     // Apply damage
-                    enemy.TakeDamage(playerStats.AttackDamage, knockbackDir, knockbackForce);
+                    enemy.TakeDamage(playerStats.AttackDamage);
+                    enemy.ApplyKnockback(knockbackDir, knockbackForce);
 
                     // Apply knockback force to enemy's Rigidbody2D
                     Rigidbody2D enemyRb = hit.GetComponent<Rigidbody2D>();

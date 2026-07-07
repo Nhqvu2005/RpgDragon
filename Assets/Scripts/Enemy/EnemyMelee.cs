@@ -33,6 +33,7 @@ namespace RPGDragon.Enemy
         protected override void Update()
         {
             if (isDead) return;
+            if (currentState == EnemyState.Hurt) return;
 
             float distToPlayer = DistanceToPlayer();
 

@@ -47,6 +47,14 @@ namespace RPGDragon.Core
             DontDestroyOnLoad(gameObject);
         }
 
+        private void Start()
+        {
+            if (Player == null && playerSpawnPoint != null)
+            {
+                SpawnPlayer(playerSpawnPoint.position);
+            }
+        }
+
         /// <summary>
         /// Transitions the game to a new state. Pausing freezes Time.timeScale to 0;
         /// all other states use normal time scale.

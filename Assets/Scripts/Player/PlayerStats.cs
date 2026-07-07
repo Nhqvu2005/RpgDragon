@@ -35,7 +35,7 @@ namespace RPGDragon.Player
         private void Start()
         {
             // Notify UI or other systems of initial HP
-            EventBus.Raise<PlayerDamagedEvent>(new PlayerDamagedEvent(0, Vector2.zero));
+            EventBus.Raise<PlayerDamagedEvent>(new PlayerDamagedEvent { Damage = 0, CurrentHP = currentHP });
         }
 
         // --- Public API ---
@@ -54,7 +54,7 @@ namespace RPGDragon.Player
             currentHP = Mathf.Clamp(currentHP - damage, 0, maxHP);
 
             // Raise the damage event for UI, audio, etc.
-            EventBus.Raise<PlayerDamagedEvent>(new PlayerDamagedEvent(damage, knockbackDirection));
+            EventBus.Raise<PlayerDamagedEvent>(new PlayerDamagedEvent { Damage = damage, CurrentHP = currentHP });
 
             // Notify the controller for state/animation
             if (playerController != null)
@@ -92,7 +92,7 @@ namespace RPGDragon.Player
             int actualHeal = currentHP - previousHP;
             if (actualHeal > 0)
             {
-                EventBus.Raise<PlayerHealedEvent>(new PlayerHealedEvent(actualHeal));
+                EventBus.Raise<PlayerHealedEvent>(new PlayerHealedEvent { Amount = actualHeal, CurrentHP = currentHP });
             }
         }
 

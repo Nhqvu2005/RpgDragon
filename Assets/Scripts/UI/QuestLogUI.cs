@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using RPGDragon.Core;
+using RPGDragon.Quest;
 
 namespace RPGDragon.UI
 {
@@ -83,40 +84,31 @@ namespace RPGDragon.UI
         /// </summary>
         public void UpdateQuestLog()
         {
-            // Fetch active quests from the QuestManager.
-            // Replace this with the actual QuestManager API once implemented.
-            var activeQuests = GetActiveQuests();
+            if (questListText == null) return;
+            questListText.text = "";
 
+            var activeQuests = QuestManager.Instance.ActiveQuests;
             if (activeQuests == null || activeQuests.Count == 0)
             {
-                if (questListText != null)
-                    questListText.text = string.Empty;
-
+                questLogPanel.SetActive(false);
                 if (emptyStateMessage != null)
                     emptyStateMessage.SetActive(true);
-
-                if (questLogPanel != null && _isOpen)
-                    questLogPanel.SetActive(false);
-
                 return;
             }
 
             if (emptyStateMessage != null)
                 emptyStateMessage.SetActive(false);
 
-            if (questListText == null)
-                return;
-
-            var sb = new System.Text.StringBuilder();
-
             foreach (var quest in activeQuests)
             {
-                // Format: [title] - [objective] ([current]/[target])
-                string checkmark = quest.IsCompleted ? "<color=green>✓ </color>" : "";
-                sb.AppendLine($"{checkmark}{quest.Title} - {quest.ObjectiveDescription} ({quest.CurrentProgress}/{quest.TargetProgress})");
+                questListText.text += $"<b>{quest.Title}</b>\n{quest.Description}\n";
+                foreach (var obj in quest.Objectives)
+                {
+                    string status = obj.IsCompleted ? " <color=green>✓</color>" : $" ({obj.currentCount}/{obj.targetCount})";
+                    questListText.text += $"  - {obj.targetId}{status}\n";
+                }
+                questListText.text += "\n";
             }
-
-            questListText.text = sb.ToString().TrimEnd();
         }
 
         // ── Event Handlers ──────────────────────────────────────────────────────
@@ -125,34 +117,6 @@ namespace RPGDragon.UI
         {
             if (_isOpen)
                 UpdateQuestLog();
-        }
-
-        // ── Quest Data Adapter ──────────────────────────────────────────────────
-
-        /// <summary>
-        /// Placeholder method that reflects the expected QuestManager API.
-        /// When RPGDragon.Quest.QuestManager is implemented, replace the body with:
-        /// <code>return QuestManager.ActiveQuests;</code>
-        /// </summary>
-        private List<QuestData> GetActiveQuests()
-        {
-            // TODO: Wire up to RPGDragon.Quest.QuestManager.ActiveQuests
-            return new List<QuestData>();
-        }
-
-        // ── Inner Quest Data Type ───────────────────────────────────────────────
-
-        /// <summary>
-        /// Lightweight data contract used by the quest log UI.
-        /// This mirrors the fields expected from RPGDragon.Quest.QuestData.
-        /// </summary>
-        public class QuestData
-        {
-            public string Title;
-            public string ObjectiveDescription;
-            public int CurrentProgress;
-            public int TargetProgress;
-            public bool IsCompleted;
         }
     }
 }
