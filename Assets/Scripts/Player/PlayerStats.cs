@@ -113,6 +113,17 @@ namespace RPGDragon.Player
         }
 
         /// <summary>
+        /// Increase max HP (from armor upgrades etc.). Also heals by the same amount.
+        /// </summary>
+        public void IncreaseMaxHP(int amount)
+        {
+            if (amount <= 0) return;
+            maxHP += amount;
+            currentHP += amount;
+            currentHP = Mathf.Clamp(currentHP, 0, maxHP);
+        }
+
+        /// <summary>
         /// Fully restore HP to max.
         /// </summary>
         public void RestoreFullHP()

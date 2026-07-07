@@ -95,6 +95,20 @@ namespace RPGDragon.Core
     }
 
     /// <summary>
+    /// Raised when the player upgrades a piece of equipment.
+    /// </summary>
+    public struct PlayerUpgradedEvent
+    {
+        public string UpgradeType; // "Weapon" or "Armor"
+        public int NewLevel;
+    }
+
+    /// <summary>
+    /// Raised when the victory sequence should begin (boss defeated).
+    /// </summary>
+    public struct GameWonEvent { }
+
+    /// <summary>
     /// Raised when the game-over sequence should begin.
     /// </summary>
     public struct GameOverEvent { }

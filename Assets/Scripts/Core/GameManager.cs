@@ -36,6 +36,11 @@ namespace RPGDragon.Core
         /// </summary>
         public GameObject Player { get; private set; }
 
+        /// <summary>
+        /// Whether the player has won the game (beat the dragon).
+        /// </summary>
+        public bool HasWon { get; set; } = false;
+
         private void Awake()
         {
             if (Instance != null)
@@ -53,6 +58,23 @@ namespace RPGDragon.Core
             {
                 SpawnPlayer(playerSpawnPoint.position);
             }
+        }
+
+        private void OnEnable()
+        {
+            EventBus.Register<GameWonEvent>(OnGameWon);
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Unregister<GameWonEvent>(OnGameWon);
+        }
+
+        private void OnGameWon(GameWonEvent evt)
+        {
+            HasWon = true;
+            SetState(GameState.Cutscene);
+            Debug.Log("[GameManager] Victory! Player has won the game.");
         }
 
         /// <summary>

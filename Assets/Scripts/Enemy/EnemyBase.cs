@@ -1,5 +1,6 @@
 using System.Collections;
 using RPGDragon.Core;
+using RPGDragon.Player;
 using UnityEngine;
 
 namespace RPGDragon.Enemy
@@ -32,6 +33,12 @@ namespace RPGDragon.Enemy
 
         [Header("Knockback")]
         [SerializeField] protected float knockbackResistance = 1f;
+
+        [Header("Shard Drops")]
+        [SerializeField] private string shardDropType = "Weapon"; // "Weapon", "Armor", or "" for none
+        [SerializeField] private int shardDropCount = 1;
+        [SerializeField] private float shardDropChance = 0.5f; // 50%
+        [SerializeField] private GameObject shardPickupPrefab = null; // optional physical pickup prefab
 
         protected EnemyState currentState;
         protected Transform player;
@@ -172,9 +179,42 @@ namespace RPGDragon.Enemy
                 Position = transform.position
             });
 
+            // Drop shards
+            DropShards();
+
             yield return new WaitForSeconds(1f);
 
             Destroy(gameObject);
+        }
+
+        /// <summary>
+        /// Drop shards on death. Spawns physical prefab if assigned, otherwise
+        /// adds directly to the player's inventory.
+        /// </summary>
+        protected virtual void DropShards()
+        {
+            if (string.IsNullOrEmpty(shardDropType) || shardDropCount <= 0) return;
+            if (Random.value > shardDropChance) return;
+
+            if (shardPickupPrefab != null)
+            {
+                // Spawn physical pickup prefab
+                for (int i = 0; i < shardDropCount; i++)
+                {
+                    Vector2 offset = Random.insideUnitCircle * 0.5f;
+                    Instantiate(shardPickupPrefab, (Vector2)transform.position + offset, Quaternion.identity);
+                }
+            }
+            else
+            {
+                // Direct add to player (works without prefab)
+                if (GameManager.Instance?.Player != null)
+                {
+                    var upgrade = GameManager.Instance.Player.GetComponent<PlayerUpgrade>();
+                    if (upgrade != null)
+                        upgrade.AddShard(shardDropType, shardDropCount);
+                }
+            }
         }
 
         public virtual void ApplyKnockback(Vector2 direction, float force)
