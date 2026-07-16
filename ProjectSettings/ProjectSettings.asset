@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!129 &1
+PlayerSettings:
+  defaultInterfaceOrientation: {fileID: 0}
+  productGUID: 2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d
+  projectName: RPGDragon
+  bundleVersion: 0.1.0
+  defaultScreenWidth: 800
+  defaultScreenHeight: 600
+  resolutionScalingMode: 0
+  runSleepTimeout: -1
+  defaultIsFullScreen: 0
+  macFullscreenMode: 0
+  d3dFullscreenMode: 0
+  preserveFramebufferAlpha: 0
+  metalForceHardwareRaytracing: 0
+  preloadedAssets: []
+  defaultCursor: {fileID: 0}
+  cursorHotspot: {x: 0, y: 0}
+  showUnitySplashScreen: 0
+  companyName: Default
+  productName: RPGDragon
+  usePlayerLog: 1
+  inactiveWhenHidden: 1
+  graphicsJobs: 0
+  scriptingBackend: 1
+  apiCompatibilityLevel: 6
+  activeColorSpace: 0
+  stripEngineCode: 0
+  managedStrippingLevel: 0
+  enableInternalProfiler: 0
+  metroInputSource: 0
+  deviceToken: []
+  locationUsageDescription:
+  bannerPrice: 0.02
+  androidSdkVersion: 0
+  androidTargetSdkVersion: 0
+  androidMinimumSdkVersion: 0
+  androidValidateAppBundleSize: 0
+  androidAppBundleSizeToValidate: 150
+  m_DefaultScreenWidth: 800
+  m_DefaultScreenHeight: 600

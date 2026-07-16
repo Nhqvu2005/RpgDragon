@@ -50,13 +50,69 @@ Assets/Scripts/
 
 > **Lưu ý:** Repo này chỉ chứa C# scripts.Cần tự import sprite/tilemap assets và dựng scene trong Unity Editor.
 
+## Thiết lập sau khi mở project lần đầu
+
+Sau khi mở project trong Unity Editor lần đầu:
+
+1. **Window -> RPGDragon -> Project Setup** -> chạy từng bước
+2. Vào **Edit -> Project Settings -> Tags and Layers** kiểm tra đã có layer `Player` (layer 8) và `Enemy` (layer 9)
+3. Import asset packs (sprite, tilemap, audio) vào thư mục `Assets/Art/` và `Assets/Audio/`
+4. **Build Settings**: thêm các scene theo thứ tự: MainMenu, Map1_Forest, Map2_Dungeon, Map3_BossCastle
+
+### Scene hiện có
+
+Các scene đã được tạo sẵn với cấu trúc cơ bản:
+
+| Scene | Nội dung cần thêm |
+|---|---|
+| MainMenu | Canvas menu (Play, Load, Quit), EventSystem |
+| Map1_Forest | Tilemap nền rừng, Player spawn, NPC OldMan, slime spawner, exit zone sang Map2 |
+| Map2_Dungeon | Tilemap nền hang động, NPC Sage, skeleton spawner, exit zone sang Map3 |
+| Map3_BossCastle | Tilemap nền castle, Dragon boss prefab, VictoryController, exit zone về làng |
+
+### Setup từng scene chi tiết
+
+**MainMenu:**
+- Tạo Canvas với Text "RPGDragon" (title) và 3 Button: Play, Load, Quit
+- Play: `SceneManager.LoadScene("Map1_Forest")`
+- Quit: `Application.Quit()`
+
+**Map1_Forest:**
+- Tạo Grid + Tilemap cho nền đất, tường, cây
+- Đặt SpawnPoint_Default ở đầu map
+- Đặt Player prefab trong scene (hoặc để GameManager tự spawn)
+- Đặt NPC OldMan + dialogue data
+- Đặt enemy spawner (slime, bat)
+- Đặt ExitZone trigger ở cuối map -> targetScene="Map2_Dungeon"
+
+**Map2_Dungeon:**
+- Tương tự Map1: tilemap hang động, NPC Sage, skeleton spawner
+- ExitZone -> targetScene="Map3_BossCastle", requiredQuestId="quest_map1"
+
+**Map3_BossCastle:**
+- Tilemap castle
+- Boss room trigger + EnemyDragon prefab
+- VictoryController script trong scene
+
+### Prefab cần tạo
+
+Sau khi import sprite assets, tạo các prefab sau trong Unity Editor:
+
+- **Player.prefab** — SpriteRenderer + Rigidbody2D + Collider2D + Animator + PlayerController/Stats/Combat/Upgrade
+- **Enemy/Slime.prefab** — EnemyMelee với sprite slime, waypoints
+- **Enemy/DragonBoss.prefab** — EnemyDragon với sprite rồng, fire breath prefab
+- **NPC/OldMan.prefab** — NPCController + collider trigger
+- **UI/HUDCanvas.prefab** — Canvas với HealthBar, BossHealthBar, DialogueUI, QuestLogUI
+- **Effects/HitSpark.prefab** — ParticleSystem
+- **Effects/FireBreathProjectile.prefab** — Projectile cho rồng phun lửa
+
+> Có thể dùng tool **Window -> RPGDragon -> Project Setup** để tạo prefab Player, EventSystem, HUDCanvas tự động.
+
 ## Trạng thái hiện tại
 
 Giai đoạn MVP - đã hoàn thành gameplay cơ bản:
-- Đã có: Di chuyển player, đánh cận chiến, enemy AI, quest system, NPC hội thoại, chuyển map, boss 2 phase, UI (health bar, quest log, pause menu)
-- Thiếu: Setup scene Unity, prefab, tilemap, asset 2D
-
-## Assets đề nghị
+- Đã có: Di chuyển player, đánh cận chiến, enemy AI, quest system, NPC hội thoại, chuyển map, boss 2 phase, nâng cấp đồ (mảnh vũ khí/giáp), UI (health bar, quest log, pause menu), victory (boss chết về làng)
+- Cần làm: Import sprite assets, tạo tilemap, set up scene, gán prefab
 
 - **Nhân vật:** 2D Pixel Art RPG spritesheet (4 hướng di chuyển, đánh)
 - **Map:** Top-down tilemap (grassland, dungeon, castle)
